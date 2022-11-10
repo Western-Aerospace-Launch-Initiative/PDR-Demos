@@ -1,10 +1,26 @@
 #include <Arduino.h>
+#include <Wire.h>
+
+const byte slaveAddr = 0x44;
+int registerAddr;
+
+void receiveRegister(int x);
+void respondData();
 
 void setup() {
-  Serial.begin(9600);
+  Wire.begin(slaveAddr);
+  Wire.setClock(100000L);
+  Wire.onReceive(receiveRegister);
 }
 
 void loop() {
-  Serial.println("Hello, World!");
   delay(1000);
+}
+
+void receiveRegister(int x){
+  registerAddr = Wire.read();
+}
+
+void respondData() {
+  Wire.write(registerAddr);
 }
